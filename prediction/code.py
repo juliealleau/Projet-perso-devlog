@@ -4,32 +4,33 @@ import pandas as pd
 from download import download
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy import stats
 #%%
 # Importation d'un fichier csv via une URL
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQVtdpXMHB4g9h75a0jw8CsrqSuQmP5eMIB2adpKR5hkRggwMwzFy5kB-AIThodhVHNLxlZYm8fuoWj/pub?gid=2105854808&single=true&output=csv"
-path_target = "./La\ myriade\ de\ Totems\ de\ Montpellier\ -\ SaisiesFormulaire.csv"
+path_target = "./La_myriade_de_Totems_de_Montpellier_SaisiesFormulaire.csv"
 print(path_target)
 download(url, path_target, replace=True)  # if needed `pip install download`
 
 # %%
 #Création d'un dataframe nommé data
-data = pd.read_csv('./La\\ myriade\\ de\\ Totems\\ de\\ Montpellier\\ -\\ SaisiesFormulaire.csv')
+data = pd.read_csv("./La_myriade_de_Totems_de_Montpellier_SaisiesFormulaire.csv")
 print(data)
 
 # %%
 #Réarrangement du tableau, suppression des données inutils
 data.columns = ['Date', 'Heure', 'Total année', 'Total journée', 'a', 'b']
-data2 = data.copy()
-data2.drop(['a','b'],1 , inplace = True)
-data2.drop([0,1], 0, inplace = True)
-data2.dropna(inplace = True)
-print(data2)
+data2b = data.copy()
+data2b.drop(['a','b'],1 , inplace = True)
+data2b.drop([0,1], 0, inplace = True)
+data2b.dropna(inplace = True)
+print(data2b)
 # %%
 #data2.info()
-data2
+data2b
 
 #%%
-data2=data2.assign(Couvre_feu=0)
+data2=data2b.assign(Couvre_feu=0)
 for i in data2.index:
   if data2['Heure'][i] > '18:00:00':
     data2['Couvre_feu'][i] = 1
@@ -40,6 +41,7 @@ temps_regroupe
 # %%
 data2['Datetime'] = temps_regroupe
 data2
+data2['hour'] = data2.Datetime.dt.hour
 del data2['Heure']
 del data2['Date']
 data3 = data2.copy()
@@ -75,105 +77,21 @@ plt.xlabel('Date')
 plt.ylabel('Nombre de velo')
 plt.plot(new_data)
 
+#%%
+new_data2 = new_data.Datetime.dt.
+#%%
+from prophet import Prophet
+m = Prophet()
+m.fit(new_data)
+# %%
+future = m.make_future_dataframe(periods=365)
+future.tail()
 
 #%%
-moyenne_mobile = new_data.rolling(window='31d').mean()
-std_mobile = new_data.rolling(window='31d').std()
-print(moyenne_mobile, std_mobile)
-
+from gluonts.model.deepar import DeepAREstimator
+estimateur = DeepAREstimator(freq=data_freq, prediction_length=7*24, trainer = Trainer(epochs=30, learning_rate=0.0001))
 # %%
-Courbe_initiale = plt.plot(new_data['Total journée'], color='turquoise', label='Courbe initiale')
-moyenne = plt.plot(moyenne_mobile['Total journée'], color='purple', label='moyenne mobile')
-std = plt.plot(std_mobile['Total journée'], color='salmon', label='écart-type mobile')
-plt.legend(loc = 'best')
-plt.title('Moyenne et écart-type mobile')
-plt.show()
-# %%
-from statsmodels.tsa.stattools import adfuller
-
-# %%
-print('Resulat du test de Dickey-Fuller:')
-test_DF = adfuller(new_data['Total journée'], autolag='AIC')
-
-sortie_test = pd.Series(test_DF[0:4], index=['Statistique de test', 'p-value', 'retard utilisé', "nombre d'observation utilisé"])
-for key,value in test_DF[4].items():
-  sortie_test['Valeur critique (%s)'%key] = value
-
-print(sortie_test)
-
-#%%
-def test_stationnarité(serie_tempo):
-  moy_mob = serie_tempo.rolling(window='31d').mean()
-  std_mob = serie_tempo.rolling(window='31d').std()
-
-  Courbe_initiale = plt.plot(serie_tempo, color='turquoise', label='Courbe initiale')
-  moyenne = plt.plot(serie_tempo, color='purple', label='moyenne mobile')
-  std = plt.plot(serie_tempo, color='salmon', label='écart-type mobile')
-  plt.legend(loc = 'best')
-  plt.title('Moyenne et écart-type mobile')
-  plt.show()
-
-  print('Resulat du test de Dickey-Fuller:')
-  test_DF = adfuller(serie_tempo, autolag='AIC')
-  sortie_test = pd.Series(test_DF[0:4], index=['Statistique de test', 'p-value', 'retard utilisé', "nombre d'observation utilisé"])
-  for key,value in test_DF[4].items():
-    sortie_test['Valeur critique (%s)'%key] = value
-  print(sortie_test)
-# %%
-#from statsmodels.tsa.seasonal import seasonal_decompose
-#decomposition = seasonal_decompose(new_data['Total journée'], period=5)
-#
-#tendance = decomposition.trend
-#saisonnalité = decomposition.seasonal
-#erreur = decomposition.resid
-#
-#plt.subplot(411)
-#plt.plot(new_data['Total journée'], color='turquoise', label='Courbe initiale')
-#plt.legend(loc = 'best')
-#plt.subplot(412)
-#plt.plot(tendance, color='purple', label='tendance')
-#plt.legend(loc = 'best')
-#plt.subplot(413)
-#plt.plot(saisonnalité, color='salmon', label='saisonnalité')
-#plt.legend(loc = 'best')
-#plt.subplot(414)
-#plt.plot(erreur, color='black', label='erreur')
-#plt.legend(loc = 'best')
-#plt.tight_layout()
-#
-## %%
-#decompositionData = erreur
-#decompositionData.dropna(inplace=True)
-#test_stationnarité(decompositionData)
-# %%
-from pmdarima import auto_arima
-tab = new_data.resample('d').max()
-stepwise_fit = auto_arima(tab['Total journée'], trace=True, suppress_warnings=True)
-# %%
-print(tab.shape)
-train=tab.iloc[:-30]
-test=tab.iloc[-30:]
-print(train.shape,test.shape)
-# %%
-from statsmodels.tsa.arima_model import ARIMA
-model=ARIMA(train['Total journée'],order=(5,0,2))
-model=model.fit()
-model.summary()
-# %%
-start=len(train)
-end=len(train)+len(test)-1
-pred=model.predict(start=start,end=end,typ='levels').rename('ARIMA Predictions')
-plt.plot(pred,color='turquoise', label='prédiction')
-plt.legend(loc = 'best')
-plt.xticks(rotation=45)
-plt.plot(tab['Total journée'].iloc[-30:], color='black', label='courbe initiale')
-plt.legend(loc = 'best')
-plt.show()
-
-# %%
-from sklearn.metrics import mean_squared_error
-from math import sqrt
-tab['Total journée'].mean()
-rmse=sqrt(mean_squared_error(pred,tab['Total journée']))
-print(rmse)
+from gluonts.model.deepar import DeepAREstimator
+from gluonts.trainer import Trainer
+from gluonts.dataset.common import ListDataset
 # %%
