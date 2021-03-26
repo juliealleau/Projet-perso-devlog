@@ -10,4 +10,4 @@ Dans cette partie, le but est pour prédire le nombre de vélos passant entre 00
 
 ## Partie visualisation
 
-
+cliquer ici: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/juliealleau/Projet-perso-devlog/master?filepath=%2Fvisualisation%2Fcode.ipynb)
