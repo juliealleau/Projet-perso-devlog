@@ -4,9 +4,27 @@ import pandas as pd
 #%%
 taille = 500
 largeur = 600
+from download import download
 
-def test(opt):
-        print("hello")
+url = "https://data.montpellier3m.fr/sites/default/files/ressources/MMM_EcoCompt_X2H20042633.json"
+path_target1 = "./JSON1.json"
+print(path_target1)
+download(url, path_target1, replace=True) 
+
+url = "https://data.montpellier3m.fr/sites/default/files/ressources/MMM_EcoCompt_X2H20042632.json"
+path_target2 = "./JSON2.json"
+print(path_target2)
+download(url, path_target2, replace=True) 
+
+url = "https://data.montpellier3m.fr/sites/default/files/ressources/MMM_EcoCompt_X2H19070220.json"
+path_target3 = "./JSON3.json"
+print(path_target3)
+download(url, path_target3, replace=True) 
+
+df1 = pd.read_json("JSON1.json") # Berracasa
+df2 = pd.read_json("JSON2.json") # Laverune
+df3 = pd.read_json("JSON3.json") # Celleneuve
+df = pd.concat([df1 , df2, df3], ignore_index = True)
 
 def velo(variable):
     df1 = pd.read_json("JSON1.json") # Berracasa
