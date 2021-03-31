@@ -40,4 +40,5 @@ __pycache__
 *_minted*
 # Xournalpp
 *.xopp
+*.json
 
