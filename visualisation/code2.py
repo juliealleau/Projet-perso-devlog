@@ -3,7 +3,6 @@
 import tkinter as tk
 import pandas as pd
 from download import download
-import matplotlib
 
 
 # %%
@@ -98,25 +97,25 @@ def velo(variable):
     output_label = tk.Label(font=("Helvetica", 15))
     output_label.place(relx=0.20, rely=0.35, relwidth=0.6, relheight=0.4)
     if variable.get() == 'Berracasa':
-       output_label['text'] = f"Le nombre de vélo passé le {df['dateObserved'][0][0:10]} est de {df['intensity'][0]}"
+        output_label['text'] = f"Le nombre de vélos passés le {df['dateObserved'][0][0:10]} est de {df['intensity'][0]}"
     if variable.get() == 'Laverune':
-        output_label['text'] = f"Le nombre de vélo passé le {df['dateObserved'][2][0:10]} est de {df['intensity'][2]}"
+        output_label['text'] = f"Le nombre de vélos passés le {df['dateObserved'][2][0:10]} est de {df['intensity'][2]}"
     if variable.get() == 'Celleneuve':
-        output_label['text'] = f"Le nombre de vélo passé le {df['dateObserved'][4][0:10]} est de {df['intensity'][4]}"
+        output_label['text'] = f"Le nombre de vélos passés le {df['dateObserved'][4][0:10]} est de {df['intensity'][4]}"
     if variable.get() == 'Lattes 2':
-        output_label['text'] = f"Le nombre de vélo passé le {df['dateObserved'][0][0:10]} est de {df['intensity'][6]}"
+        output_label['text'] = f"Le nombre de vélos passés le {df['dateObserved'][0][0:10]} est de {df['intensity'][6]}"
     if variable.get() == 'Lattes 1':
-        output_label['text'] = f"Le nombre de vélo passé le {df['dateObserved'][0][0:10]} est de {df['intensity'][8]}"
+        output_label['text'] = f"Le nombre de vélos passés le {df['dateObserved'][0][0:10]} est de {df['intensity'][8]}"
     if variable.get() == 'Vieille-Poste':
-        output_label['text'] = f"Le nombre de vélo passé le {df['dateObserved'][0][0:10]} est de {df['intensity'][10]}"
+        output_label['text'] = f"Le nombre de vélos passés le {df['dateObserved'][0][0:10]} est de {df['intensity'][10]}"
     if variable.get() == 'Gerhardt':
-        output_label['text'] = f"Le nombre de vélo passé le {df['dateObserved'][0][0:10]} est de {df['intensity'][12]}"
+        output_label['text'] = f"Le nombre de vélos passés le {df['dateObserved'][0][0:10]} est de {df['intensity'][12]}"
     if variable.get() == 'Delmas 1':
-        output_label['text'] = f"Le nombre de vélo passé le {df['dateObserved'][0][0:10]} est de {df['intensity'][14]}"
+        output_label['text'] = f"Le nombre de vélos passés le {df['dateObserved'][0][0:10]} est de {df['intensity'][14]}"
     if variable.get() == 'Albert 1er':
-        output_label['text'] = f"Le nombre de vélo passé le {df['dateObserved'][0][0:10]} est de {df['intensity'][16]}"
+        output_label['text'] = f"Le nombre de vélos passés le {df['dateObserved'][0][0:10]} est de {df['intensity'][16]}"
     if variable.get() == 'Delmas 2':
-        output_label['text'] = f"Le nombre de vélo passé le {df['dateObserved'][0][0:10]} est de {df['intensity'][18]}"
+        output_label['text'] = f"Le nombre de vélos passés le {df['dateObserved'][0][0:10]} est de {df['intensity'][18]}"
 
 
 # %%
@@ -136,6 +135,7 @@ cadre.place(relx=0.5, rely=0.1, relwidth=0.75, relheight=0.1, anchor='n')
 
 #menu déroulant
 OptionList = [
+"Choisissez un lieu",
 "Berracasa",
 "Laverune",
 "Celleneuve",
