@@ -1,5 +1,5 @@
 #%%
-#Importation des packages necessaire au code
+#Importation des packages necessaires au code
 import pandas as pd
 from download import download
 import numpy as np
@@ -17,7 +17,7 @@ data = pd.read_csv("./La_myriade_de_Totems_de_Montpellier_SaisiesFormulaire.csv"
 #print(data)
 
 
-#Réarrangement du tableau, suppression des données inutils
+#Réarrangement du tableau, suppression des données inutiles
 data.columns = ['Date', 'Heure', 'Total année', 'Total journée', 'a', 'b']
 data2b = data.copy()
 data2b.drop(['a', 'b'], 1, inplace=True)
@@ -36,7 +36,7 @@ for i in data2.index:
     data2['Couvre_feu'][i] = 1
 
 
-#regroupement de date et heure
+#regroupement de 'date' et 'heure'
 temps_regroupe = pd.to_datetime(data2['Date'] + ' ' + data2['Heure'], format='%d/%m/%Y %H:%M:%S')                        
 data2['Datetime'] = temps_regroupe
 data2['date'] = data2.Datetime.dt.date
@@ -47,7 +47,7 @@ data3 = data2.copy()
 data3 = data2.set_index(['Datetime'])
 
 
-#suppression de la colonne Total année
+#suppression de la colonne 'Total année'
 data4 = data3.copy()
 data4.drop(['Total année'], 1, inplace=True)
 
@@ -60,7 +60,7 @@ for i in range(1432):
   if new_data.index[i] >= pd.to_datetime('2020-10-29') and new_data.index[i] <= pd.to_datetime('2020-12-15'):
     new_data['Confinement'][i] = 1
 
-#graph du nombre de vélo par jour
+#graphe du nombre de vélos par jour
 plt.xlabel('Date')
 plt.ylabel('Nombre de velo')
 plt.plot(new_data['Total journée'])
@@ -70,7 +70,8 @@ df = new_data.rename(columns={'Total journée': 'y'})
 df['ds'] = new_data.index
 
 #%%
-#Test de Adfuller pour tester la stationnarité du modèle
+
+#Test de Dickey-Fulle pour tester la stationnarité du modèle
 from statsmodels.tsa.stattools import adfuller
 
 print('Resulat du test de Dickey-Fuller:')
@@ -80,7 +81,7 @@ for key,value in test_DF[4].items():
   sortie_test['Valeur critique (%s)'%key] = value
 print(sortie_test)
 
-#La p-value est de 0.006<0.05 donc c'est stationnaire
+#La p-value est de 0.006 < 0.05 donc c'est stationnaire
 
 ###################Prédiction##################
 
@@ -95,7 +96,7 @@ modele.add_country_holidays(country_name="FR" )
 #Ajustement du modèle
 modele.fit(df)
 
-#Création des futures date et des nouvelles colonnes confinement et couvre_feu.
+#Création des futures dates et des nouvelles colonnes 'confinement' et 'couvre_feu'.
 future = modele.make_future_dataframe(periods=23*3, freq='H')
 future_range = pd.date_range('2021-04-02', periods=23*3, freq='H')
 ds = pd.to_datetime(future['ds'], format='%d/%m/%Y %H:%M:%S')
@@ -150,7 +151,8 @@ for i in range(0, len(forecast)):
   if forecast['ds'][i] >= pd.to_datetime('2021-04-02 08:00:00') and forecast['ds'][i] <= pd.to_datetime('2021-04-02 10:00:00'):
     print(forecast[['ds', 'yhat']].iloc[i])
 #%%
-############essai du modèle sur les données existante############
+
+#################################  essai du modèle sur les données existante  #################################
 train = df.drop(df.index[-40:])
 future2 = df.loc[(df['ds'] > df.index[-41:][0])]
 
