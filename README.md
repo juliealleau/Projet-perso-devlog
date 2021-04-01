@@ -6,7 +6,7 @@
 https://github.com/juliealleau
 
 ## Partie prédiction
-Dans cette partie, le but est pour prédire le nombre de vélos passant entre 00h01 et 09h00 le vendredi 2 avril.
+Dans cette partie, le but est pour prédire le nombre de vélos passant entre 00h01 et 09h00 le vendredi 2 avril devant le totem de Albert 1er.
 
 ## Partie visualisation
 Cliquez ici: https://replit.com/@juliealleau/Visualisation#main.py pour lancer le code de la visualisation.

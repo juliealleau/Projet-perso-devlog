@@ -97,7 +97,7 @@ modele.fit(df)
 
 #Création des futures date et des nouvelles colonnes confinement et couvre_feu.
 future = modele.make_future_dataframe(periods=23*3, freq='H')
-future_range = pd.date_range('2021-04-01', periods=23*3, freq='H')
+future_range = pd.date_range('2021-04-02', periods=23*3, freq='H')
 ds = pd.to_datetime(future['ds'], format='%d/%m/%Y %H:%M:%S')
 future['heure'] = future.ds.dt.hour
 
@@ -190,10 +190,6 @@ plt.xlim([-1, 41])
 plt.ylim([-1, 2000])
 plt.show()
 fig2.savefig("difference.png", dpi=1000)
-
-
-
-
 
 
 # %%
